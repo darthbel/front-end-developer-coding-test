@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: rgb(78, 16, 16);
 }
 
 code {
@@ -12,8 +13,8 @@ code {
     monospace;
 }
 
-.restContainer {
-  width: 200px;
+.app {
+  background-color: rgb(219, 240, 236);
 }
 
 .header {
@@ -22,4 +23,94 @@ code {
   background-size: cover;
   background-color: black;
   height: 400px;
+}
+
+.header h1,
+.header h4 {
+  color: rgb(241, 136, 122);
+  font-weight: bold;
+  text-shadow: 2px 2px rgb(78, 16, 16);
+}
+
+.header h1 {
+  font-size: 52px;
+}
+
+.searchByCity {
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+.searchByCity div {
+  margin-bottom: 10px;
+}
+
+.searchByCity div label {
+  padding-top: 6px;
+}
+
+.searchRestButton {
+  height: 100%;
+  width: 200px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 10px;
+  background-color: rgb(78, 16, 16);
+  color: white;
+}
+
+.cityNameInput {
+  border-radius: 10px;
+}
+
+.restaurants {
+  min-height: 200px;
+}
+
+.restContainer {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 280px;
+  height: 260px;
+  background-color: rgb(241, 136, 122);
+  box-shadow: 2px 2px rgb(78, 16, 16);
+  margin-top: 40px;
+  border-radius: 10px;
+}
+
+.restName {
+  padding: 10px;
+  color: rgb(78, 16, 16);
+  text-align: center;
+  margin-bottom: 20px;
+  height: 100px;
+  background-color: rgb(240, 150, 138);
+  border-radius: 10px;
+}
+
+.restContainer p {
+  text-align: left;
+}
+
+.pageButtons {
+  margin-top: 40px;
+}
+
+.pageButtons div {
+  width: 140px;
+}
+
+.pageButtons button {
+  width: 100%;
+  border-radius: 10px;
+  background-color: rgb(78, 16, 16);
+  color: white;
+}
+
+.footer {
+  background-color: rgb(78, 16, 16);
+  color: rgb(241, 136, 122);
+  height: 100px;
+  text-align: center;
+  margin-top: 40px;
 }

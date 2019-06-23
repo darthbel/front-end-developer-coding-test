@@ -13,8 +13,8 @@ class Restaurants extends React.Component {
       currentPage: 1,
       totalRestaurants: 0,
       totalPages: 0,
-      showResults: false
-      // @todo loading
+      showResults: false,
+      isLoading: false
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -26,6 +26,9 @@ class Restaurants extends React.Component {
   fetchData(page) {
     try {
       // @todo Create validations
+      this.setState({
+        isLoading: true
+      })
       fetch(
         'http://opentable.herokuapp.com/api/restaurants?city=' +
           this.state.cityName +
@@ -40,7 +43,8 @@ class Restaurants extends React.Component {
           this.setState({
             restaurantsData: restaurants,
             totalRestaurants: response.total_entries,
-            totalPages: totalPages
+            totalPages: totalPages,
+            isLoading: false
           })
         })
     } catch (err) {
@@ -71,6 +75,7 @@ class Restaurants extends React.Component {
       showResults: true
     })
     this.fetchData(newCurrentPage)
+    window.scrollTo(0, 0)
   }
 
   handleChange(event) {
@@ -90,36 +95,39 @@ class Restaurants extends React.Component {
 
   render() {
     return (
-      <div className='container'>
+      <div className='container restaurants text-center'>
         <SearchByCity
           handleClick={this.handleClick}
           handleChange={this.handleChange}
           cityName={this.state.cityName}
         />
         {/* showResults is true once the Search Restaurants button is clicked */}
-        {this.state.showResults && (
-          <div className='results d-flex flex-wrap align-items-center'>
-            {/* if there are more than 0 results, the results will be displayed */}
-            {this.state.totalRestaurants > 0 ? (
-              this.state.restaurantsData.map(restaurant => (
-                <Restaurant
-                  className=''
-                  key={restaurant.id}
-                  restaurant={restaurant}
-                />
-              ))
-            ) : (
-              // If 0 results, the followin message will be displayed
-              <div>No restaurants found</div>
-            )}
-            {this.state.totalRestaurants > 25 && (
-              <PageButtons
-                handleClick={this.handleClick}
-                currentPage={this.state.currentPage}
-                totalPages={this.state.totalPages}
-              />
-            )}
-          </div>
+        {this.state.showResults &&
+          (this.state.isLoading ? (
+            <div>Loading Results</div>
+          ) : (
+            <div className='results d-flex flex-wrap align-items-center justify-content-center'>
+              {/* if there are more than 0 results, the results will be displayed */}
+              {this.state.totalRestaurants > 0 ? (
+                this.state.restaurantsData.map(restaurant => (
+                  <Restaurant
+                    className=''
+                    key={restaurant.id}
+                    restaurant={restaurant}
+                  />
+                ))
+              ) : (
+                // If 0 results, the following message will be displayed
+                <div>No restaurants found</div>
+              )}
+            </div>
+          ))}
+        {this.state.totalRestaurants > 25 && (
+          <PageButtons
+            handleClick={this.handleClick}
+            currentPage={this.state.currentPage}
+            totalPages={this.state.totalPages}
+          />
         )}
       </div>
     )
