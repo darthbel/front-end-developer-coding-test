@@ -30,7 +30,7 @@ class Restaurants extends React.Component {
         isLoading: true
       })
       fetch(
-        'http://opentable.herokuapp.com/api/restaurants?city=' +
+        'https://opentable.herokuapp.com/api/restaurants?city=' +
           this.state.cityName +
           '&page=' +
           page
