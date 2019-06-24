@@ -12,9 +12,15 @@ function Restaurant(props) {
         <h5>{props.restaurant.name}</h5>
       </div>
       <div>
-        <p>Address: {props.restaurant.address}</p>
-        <p>City: {props.restaurant.city}</p>
-        <p>Price: {price}</p>
+        <p>
+          <strong>Address:</strong> {props.restaurant.address}
+        </p>
+        <p>
+          <strong>City:</strong> {props.restaurant.city}
+        </p>
+        <p>
+          <strong>Price:</strong> {price}
+        </p>
       </div>
     </div>
   )

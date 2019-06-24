@@ -18,38 +18,56 @@ class Restaurants extends React.Component {
     }
 
     this.handleChange = this.handleChange.bind(this)
-    this.handlePageChange = this.handlePageChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
+  }
+
+  // Setting the page's title
+  componentDidMount() {
+    document.title = 'Find Restaurants in Your City'
   }
 
   // method to fetch the data from the API
   fetchData(page) {
-    try {
-      // @todo Create validations
-      this.setState({
-        isLoading: true
-      })
-      fetch(
-        'https://opentable.herokuapp.com/api/restaurants?city=' +
-          this.state.cityName +
-          '&page=' +
-          page
-      )
-        .then(response => response.json())
-        .then(response => {
-          const { restaurants } = response
-          const totalPages =
-            parseInt(response.total_entries / response.per_page) + 1
+    this.setState({
+      isLoading: true
+    })
+    fetch(
+      'https://opentable.herokuapp.com/api/restaurants?city=' +
+        this.state.cityName +
+        '&page=' +
+        page
+    )
+      // checking for bad requests
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          // isLoading is set to false, and no results are displayed
           this.setState({
-            restaurantsData: restaurants,
-            totalRestaurants: response.total_entries,
-            totalPages: totalPages,
+            restaurantsData: null,
+            totalRestaurants: null,
+            totalPages: null,
             isLoading: false
           })
+          // error message is displayed on the console
+          throw Error(`Request rejected with status ${response.status}`)
+        }
+      })
+      // in case of successful response, the information are stored in the states
+      .then(response => {
+        const { restaurants } = response
+        const totalPages =
+          parseInt(response.total_entries / response.per_page) + 1
+        this.setState({
+          restaurantsData: restaurants,
+          totalRestaurants: response.total_entries,
+          totalPages: totalPages,
+          isLoading: false
         })
-    } catch (err) {
-      console.error(err.message)
-    }
+      })
+      .catch(err => {
+        console.error(err)
+      })
   }
 
   handleClick(event) {
@@ -81,21 +99,15 @@ class Restaurants extends React.Component {
   handleChange(event) {
     const { name, value } = event.target
     this.setState({
-      [name]: value
+      // not able to enter special characters
+      [name]: value.replace(/[-!@#$%^&*()_|+=?;:",.<>]/gi, '')
     })
-  }
-
-  handlePageChange(event) {
-    const newCurrentPage = this.state.currentPage + 1
-    this.setState({
-      currentPage: newCurrentPage
-    })
-    this.fetchData(newCurrentPage)
   }
 
   render() {
     return (
       <div className='container restaurants text-center'>
+        {/* Search Component */}
         <SearchByCity
           handleClick={this.handleClick}
           handleChange={this.handleChange}
@@ -103,6 +115,8 @@ class Restaurants extends React.Component {
         />
         {/* showResults is true once the Search Restaurants button is clicked */}
         {this.state.showResults &&
+          // if the system is still fetching the results, isLoading = true
+          // when it is done fetching, isLoading = false, and the results are displayed
           (this.state.isLoading ? (
             <div>Loading Results</div>
           ) : (
@@ -117,11 +131,12 @@ class Restaurants extends React.Component {
                   />
                 ))
               ) : (
-                // If 0 results, the following message will be displayed
+                // if 0 results, the following message will be displayed
                 <div>No restaurants found</div>
               )}
             </div>
           ))}
+        {/* if more than one page, the navigation page buttons are displayed */}
         {this.state.totalRestaurants > 25 && (
           <PageButtons
             handleClick={this.handleClick}
